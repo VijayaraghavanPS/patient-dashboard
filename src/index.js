@@ -1,17 +1,24 @@
 import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
+import ReactDOM from 'react-dom';
+import FHIR from 'fhirclient';
 import App from './App';
-import reportWebVitals from './reportWebVitals';
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+FHIR.oauth2
+  .init({
+    clientId: '83a14ce3-566d-40da-84c0-a7c013da6de6',
+    scope: 'launch/patient openid fhirUser patient/*.read',
+    //scope: 'openid profile patient/AllergyIntolerance.read patient/Condition.read patient/Observation.read patient/MedicationRequest.read launch/patient offline_access',
+    //iss: 'https://fhir.epic.com/interconnect-fhir-oauth/api/FHIR/R4',
+    iss: 'https://launch.smarthealthit.org/v/r4/sim/WzMsIiIsIiIsIkFVVE8iLDAsMCwwLCIiLCIiLCIiLCIiLCIiLCIiLCIiLDAsMV0/fhir',
+  })
+  .then(() => {
+    ReactDOM.render(
+      <React.StrictMode>
+        <App />
+      </React.StrictMode>,
+      document.getElementById('root')
+    );
+  })
+  .catch((error) => {
+    console.error(error);
+  });
